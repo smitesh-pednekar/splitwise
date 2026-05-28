@@ -1,4 +1,4 @@
-# 💸 Splitwise Clone
+# 💸 Splitwise
 
 > A full-stack, production-ready expense-splitting web application — built as an internship evaluation project in 3 focused days. Clones the core UX and business logic of Splitwise with a clean, modern design using React, Django REST Framework, and MongoDB Atlas.
 
