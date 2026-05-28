@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* Geist loaded from Google Fonts in index.html */
+
+@theme {
+  /* === Brand Colors === */
+  --color-primary: hsl(161 84% 39%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-primary-hover: hsl(161 84% 34%);
+
+  /* === Neutrals === */
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(240 10% 3.9%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(240 10% 3.9%);
+  --color-muted: hsl(240 4.8% 95.9%);
+  --color-muted-foreground: hsl(240 3.8% 46.1%);
+  --color-border: hsl(240 5.9% 90%);
+  --color-input: hsl(240 5.9% 90%);
+  --color-ring: hsl(161 84% 39%);
+  --color-accent: hsl(240 4.8% 95.9%);
+  --color-accent-foreground: hsl(240 5.9% 10%);
+  --color-secondary: hsl(240 4.8% 95.9%);
+  --color-secondary-foreground: hsl(240 5.9% 10%);
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(240 10% 3.9%);
+
+  /* === Sidebar === */
+  --color-sidebar: hsl(0 0% 98.5%);
+  --color-sidebar-border: hsl(240 5.9% 92%);
+  --color-sidebar-foreground: hsl(240 5.9% 10%);
+  --color-sidebar-muted: hsl(240 3.8% 46.1%);
+
+  /* === Semantic Balance Colors === */
+  --color-success: hsl(142 71% 45%);
+  --color-success-bg: hsl(142 76% 97%);
+  --color-danger: hsl(0 84% 60%);
+  --color-danger-bg: hsl(0 86% 97%);
+
+  /* === Radius === */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-full: 9999px;
+
+  /* === Font === */
+  --font-sans: "Geist", "Inter", system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Fira Code", monospace;
+}
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    line-height: 1.5;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: hsl(240 5.9% 80%); border-radius: 9999px; }
+
+  /* Focus visible — green ring, not blue */
+  *:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  /* Remove number spinners */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  /* Gradient shimmer for skeletons */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .animate-shimmer {
+    background: linear-gradient(90deg, hsl(240 4.8% 95.9%) 25%, hsl(240 4.8% 91%) 50%, hsl(240 4.8% 95.9%) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+}

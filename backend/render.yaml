@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: splitwise-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn splitwise.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: splitwise.settings
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: DEBUG
+        value: "False"
