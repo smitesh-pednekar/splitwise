@@ -90,7 +90,7 @@ export default function SettleUpPage() {
       </div>
 
       {/* Two-column layout */}
-      <div className="flex flex-col lg:flex-row gap-8 items-start">
+      <div className="flex flex-col md:flex-row gap-8 md:items-start">
 
         {/* ── Left column: form ── */}
         <div className="flex-1 min-w-0 space-y-3">
@@ -205,7 +205,7 @@ export default function SettleUpPage() {
         </div>
 
         {/* ── Right column: contextual panel ── */}
-        <div className="hidden lg:flex flex-col gap-4 w-72 flex-shrink-0 sticky top-6">
+        <div className="hidden md:flex flex-col gap-4 w-64 lg:w-72 flex-shrink-0 sticky top-6">
 
           {/* All balances at a glance */}
           {balances.length > 0 && (

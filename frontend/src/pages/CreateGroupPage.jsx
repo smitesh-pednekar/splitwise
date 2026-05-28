@@ -72,7 +72,7 @@ export default function CreateGroupPage() {
       </div>
 
       {/* Two-column layout */}
-      <div className="flex flex-col lg:flex-row gap-8 items-start">
+      <div className="flex flex-col md:flex-row gap-8 md:items-start">
 
         {/* ── Left: Form ── */}
         <div className="flex-1 min-w-0">
@@ -169,7 +169,7 @@ export default function CreateGroupPage() {
         </div>
 
         {/* ── Right: Contextual help panel ── */}
-        <div className="hidden lg:flex flex-col gap-4 w-72 flex-shrink-0 sticky top-6">
+        <div className="hidden md:flex flex-col gap-4 w-64 lg:w-72 flex-shrink-0 sticky top-6">
 
           {/* Quick-fill templates */}
           <div className="bg-card rounded-xl border border-border p-4">

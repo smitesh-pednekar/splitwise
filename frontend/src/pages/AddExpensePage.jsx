@@ -72,7 +72,7 @@ export default function AddExpensePage() {
         <h1 className="text-lg font-semibold tracking-tight">Add expense</h1>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8 items-start">
+      <div className="flex flex-col md:flex-row gap-8 md:items-start">
         {/* ── Left: Form ── */}
         <div className="flex-1 min-w-0">
           <form onSubmit={handleSubmit} className="space-y-3">
@@ -136,7 +136,7 @@ export default function AddExpensePage() {
         </div>
 
         {/* ── Right: Live split preview ── */}
-        <div className="hidden lg:flex flex-col gap-4 w-72 flex-shrink-0 sticky top-6">
+        <div className="hidden md:flex flex-col gap-4 w-64 lg:w-72 flex-shrink-0 sticky top-6">
 
           {/* Live split preview */}
           <div className="bg-card rounded-xl border border-border p-4">

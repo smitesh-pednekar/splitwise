@@ -45,7 +45,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-muted/40 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm space-y-6">
+      <div className="w-full max-w-sm sm:max-w-md lg:max-w-sm space-y-6">
         {/* Brand */}
         <div className="text-center space-y-3">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" className="w-11 h-11 block mx-auto">

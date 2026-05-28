@@ -33,14 +33,13 @@ export default function DashboardPage() {
           <h1 className="text-lg font-semibold tracking-tight text-foreground">Dashboard</h1>
           <p className="text-sm text-muted-foreground">Hi {user?.name?.split(' ')[0]} 👋</p>
         </div>
-        <Button size="sm" onClick={() => navigate('/groups/new')} id="create-group-btn"
-          className="hidden sm:flex">
+        <Button size="sm" onClick={() => navigate('/groups/new')} id="create-group-btn">
           <Plus className="w-4 h-4" /> New Group
         </Button>
       </div>
 
       {/* Two-column layout: content | summary panel */}
-      <div className="flex flex-col lg:flex-row gap-6 items-start">
+      <div className="flex flex-col md:flex-row gap-6 md:items-start">
 
         {/* ── Left column — main content ── */}
         <div className="flex-1 min-w-0 space-y-4">
@@ -112,7 +111,7 @@ export default function DashboardPage() {
         </div>
 
         {/* ── Right column — sticky summary panel ── */}
-        <div className="hidden lg:flex flex-col gap-3 w-72 flex-shrink-0 sticky top-6">
+        <div className="hidden md:flex flex-col gap-3 w-64 lg:w-72 flex-shrink-0 sticky top-6">
 
           {/* Overall balance card */}
           {loading ? (
