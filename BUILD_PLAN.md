@@ -308,3 +308,154 @@ splitwise-frontend/
 ---
 
 > **Next Step:** Approve this plan → begin Day 1 backend implementation.
+
+---
+
+## 1. Product Research
+
+### How I Studied Splitwise
+I studied Splitwise by using the live product hands-on — walking through the core flows as an end user: creating groups, adding expenses, viewing balances, and recording settlements. I also reviewed the Splitwise website's feature descriptions to understand its mental model of "who owes whom" and how it surfaces that information.
+
+### What I Learned
+- Splitwise's core value is **eliminating the awkwardness of money between friends** — it tracks debts passively so people don't have to remember.
+- The most critical UX moment is the **balances view** — users need to see at a glance what they owe without doing math.
+- "Settle Up" is a distinct action, not just deleting an expense — it creates a payment record that adjusts balances.
+- Groups are the primary organizing unit; the dashboard is just a summary across all groups.
+- The product has significant depth (receipts, multiple currencies, activity feeds) but the **core loop is simple**: add expense → see balance → settle up.
+
+### Workflows I Identified
+1. **Onboarding** — Sign up, land on empty dashboard, create first group
+2. **Expense lifecycle** — Add expense → splits auto-calculated → balance updated immediately
+3. **Balance resolution** — View who owes whom → settle up (full or partial) → balance reduces
+4. **Group management** — Add/remove members, delete group when trip is over
+
+### Product Assumptions I Made
+- All splits are **equal** across all group members — the most common real-world case and simplest to implement correctly
+- Members must be **pre-registered users** — avoids the complexity of invitation flows
+- Balances are computed **on the fly** from raw expense + settlement records — avoids stale data
+- The "member left group" state must be handled — participants are snapshotted at expense creation time
+
+---
+
+## 2. Final Scope
+
+### What I Chose to Build
+- User registration and login (email + password + name)
+- Create groups and add members by email
+- Add expenses: description, amount, payer, category, date — split equally across all current members
+- Edit and delete expenses (creator or group admin)
+- View pairwise balances per group (Balances tab)
+- Overall dashboard: net amount owed/owing + per-group breakdown
+- Record settlements (partial or full) between any two group members
+- Responsive UI: persistent sidebar on desktop, bottom nav on mobile
+- Unit tests for the balance calculation logic
+
+### What I Chose NOT to Build
+- Activity feed / expense history log
+- Email notifications or invitations for non-registered users
+- Receipt uploads or scanning
+- Recurring expenses or expense templates
+- Multiple currencies or currency conversion
+- Comments on expenses
+- Unequal splits or subset-member splits
+- Simplified debt (debt consolidation / chain reduction)
+- Social auth (Google, GitHub)
+- Dark mode toggle
+- Expense pagination
+- Frontend automated tests
+
+### Why This Is Achievable in 3 Days
+The scope maps cleanly to 3 independent layers (backend models → API → frontend UI) that can be built sequentially. The balance algorithm is the only non-trivial logic, and it's a pure function with clear inputs/outputs that can be tested in isolation. All other features are standard CRUD. By cutting everything that adds complexity without adding evaluator value (e.g., unequal splits, activity feed), each day has a defined, achievable deliverable.
+
+---
+
+## 3. Architecture
+
+### Tech Stack
+| Layer | Technology | Reason |
+|---|---|---|
+| Frontend | React (Vite) | Fast iteration, strong ecosystem, familiar |
+| UI Library | Tailwind CSS v4 + shadcn/ui | Pre-built accessible primitives, consistent design |
+| Backend | Django + Django REST Framework | Rapid API development, batteries included |
+| Database | MongoDB Atlas (free M0) | No credit card, schemaless flexibility for documents |
+| ODM | MongoEngine | Django-compatible document mapper for MongoDB |
+| Auth | PyJWT (manual) | SimpleJWT requires Django ORM — incompatible with MongoEngine |
+| Frontend Deploy | Vercel | Free, zero-config for React/Vite SPAs |
+| Backend Deploy | Render | Free web service, auto-deploys from GitHub |
+
+### Database Schema
+Four MongoDB collections: `users`, `groups`, `expenses`, `settlements`. Expenses store a `participants` snapshot (members at creation time) so "member left" scenarios are handled correctly. Balances are never stored — computed on the fly from expenses + settlements.
+
+### API Design
+REST API at `/api/v1/`. All protected routes use `Authorization: Bearer <token>`. Key endpoint groups: `/auth/`, `/users/`, `/groups/`, `/groups/:id/expenses/`, `/groups/:id/balances/`, `/groups/:id/settlements/`, `/dashboard/balances/`. Full table in `AI_CONTEXT.md` Section 11.
+
+### Frontend Structure
+React Router v6 SPA with 7 pages. Global `AuthContext` stores user + token. Axios service layer auto-attaches bearer token. Components are organized by domain (`groups/`, `expenses/`, `balances/`, `settlements/`, `common/`, `layout/`). See `AI_CONTEXT.md` Section 14 for full tree.
+
+### Deployment Approach
+- **Backend → Render**: Push to GitHub → Render auto-deploys. Build: `pip install -r requirements.txt`. Start: `gunicorn splitwise.wsgi:application`. Secrets injected via Render dashboard env vars.
+- **Frontend → Vercel**: Push to GitHub → Vercel auto-deploys. `VITE_API_BASE_URL` set to Render URL. `vercel.json` rewrites all routes to `index.html` for SPA routing.
+- **Database**: MongoDB Atlas free M0 cluster, IP whitelisted `0.0.0.0/0` for Render's dynamic IPs.
+
+---
+
+## 4. AI Collaboration Process
+
+### How I Instructed the AI
+I started by giving the AI a high-level goal ("build a Splitwise clone for an internship evaluation") and asked it to run a product discovery interview before writing any code. I answered questions one round at a time and approved the context document before any implementation began. During implementation, I gave task-level instructions ("build the balance calculator", "create the expense list component") and reviewed the output before moving forward.
+
+### What Questions the AI Asked
+The AI ran 4 rounds of clarifying questions covering:
+1. **Scope** — Which Splitwise features are in/out, what "done" looks like for the evaluator
+2. **Data model decisions** — Equal vs. unequal splits, participants snapshot vs. live membership, balance storage vs. computed
+3. **Auth approach** — JWT vs. session, token storage, refresh token, social auth
+4. **Deployment constraints** — Free tier services, environment variable management, CORS setup
+
+### How I Answered
+I answered concisely and decisively — choosing the simplest viable option in every case (equal splits, no refresh tokens, no receipt uploads). Where I was unsure, I asked the AI to recommend the industry-standard simple approach.
+
+### How the Plan Evolved
+- Initially considered SQLite for simplicity; switched to MongoDB Atlas after confirming the free M0 cluster meets all needs
+- Added the `participants` snapshot field to Expense after the AI flagged the "member left" edge case
+- Added `backend/.env.example` and `render.yaml` to the file checklist after deployment concerns were raised
+- UI polish scope (skeleton loaders, empty states, mobile bottom nav) was added after Day 2 review
+
+### How AI_CONTEXT.md Was Maintained
+`AI_CONTEXT.md` was established as the single source of truth before any code was written. Every architectural decision was recorded there first. `BUILD_PLAN.md` was then derived from it. During implementation, whenever a decision changed (e.g., adjusted an API response shape), `AI_CONTEXT.md` was updated to reflect the final state. The file is designed so that another engineer could paste it into an AI tool and recreate a similar app.
+
+---
+
+## 5. Tradeoffs
+
+### What I Simplified
+- **Equal splits only** — Real Splitwise supports custom amounts, percentages, and shares. Equal splits cover ~80% of real-world use cases and eliminate complex input UI and calculation logic.
+- **No debt consolidation** — Raw pairwise balances are shown (A owes B $10, A owes C $5) rather than simplified chains. Simpler to implement and explain; accuracy is unchanged.
+- **Participants snapshot** — Instead of querying live group membership for historical expenses, participants are saved at creation time. Simpler and more correct.
+- **Manual JWT** — Instead of integrating Django's ORM-based auth, JWT is implemented manually with PyJWT. More code but no ORM dependency conflict with MongoEngine.
+
+### What I Hardcoded
+- Split type: always equal across all current group members — no UI option to change
+- Categories: Food, Travel, Rent, Utilities, Others — fixed list, no custom categories
+- Token expiry: 7 days — no configuration, no refresh flow
+- Decimal precision: 2 decimal places everywhere (`round(..., 2)`)
+- Date picker default: today's date
+
+### What I Avoided
+- **Django ORM** — Incompatible with MongoEngine; using raw MongoEngine documents + manual serialization
+- **SimpleJWT / Knox** — ORM-dependent; using PyJWT directly
+- **Celery / background tasks** — No async work needed at this scope
+- **Redis / caching** — Balance computation is fast enough for small groups without caching
+- **Frontend testing (Jest/Vitest)** — Time constraint; unit tests focused on the highest-risk backend logic only
+- **Docker / docker-compose** — Adds setup complexity without benefit for a 3-day project
+
+### What I Would Improve with More Time
+- **Debt consolidation algorithm** — Reduce N pairwise balances to the minimum number of transactions
+- **Unequal splits** — Let the payer specify custom amounts per participant
+- **Activity feed** — Chronological log of all expense and settlement events per group
+- **Email invitations** — Allow adding non-registered users who receive an invite link
+- **Expense pagination** — Required once groups accumulate many expenses
+- **Frontend automated tests** — Component tests with Vitest + Testing Library for critical flows
+- **Refresh token + token rotation** — Current 7-day access token is a security tradeoff
+- **Receipt upload** — OCR-parsed expense creation from a photo
+- **Simplified/simplified currency support** — Single currency per group selected at creation
+

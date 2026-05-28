@@ -4,19 +4,12 @@
 
 <div align="center">
 
-**[Live Demo](https://your-app.vercel.app)** · **[API Base URL](https://your-api.onrender.com)** · [AI_CONTEXT.md](./AI_CONTEXT.md) · [BUILD_PLAN.md](./BUILD_PLAN.md)
+**[Live Demo](https://splitwise-six-kappa.vercel.app/)** · **[API Base URL](https://splitwise-r3oa.onrender.com/)** · [AI_CONTEXT.md](./AI_CONTEXT.md) · [BUILD_PLAN.md](./BUILD_PLAN.md)
 
 </div>
 
 ---
 
-## 📸 Screenshots
-
-| Dashboard | Group Detail | Settle Up |
-|---|---|---|
-| Two-column layout with overall net balance | Tabbed view: Expenses / Balances | Payer → Payee flow with live preview |
-
----
 
 ## 🏗️ System Architecture
 
@@ -609,21 +602,6 @@ Every form page has a sticky contextual right panel (`hidden lg:flex`):
 
 ---
 
-## 🤝 AI Collaboration
-
-This project was built collaboratively with an AI assistant (Antigravity by Google DeepMind). The collaboration included:
-
-- **Product discovery interview** — 4 rounds of Q&A to scope the MVP precisely
-- **Architecture decisions** — Data model, API design, balance algorithm
-- **3-day build plan** — Hourly breakdown from schema to deployment
-- **Code generation & iteration** — All components, pages, and backend views
-- **UI polish** — Two-column layouts, responsive mobile views, design system
-
-Full documentation:
-- [`AI_CONTEXT.md`](./AI_CONTEXT.md) — Single source of truth for all product and technical decisions
-- [`BUILD_PLAN.md`](./BUILD_PLAN.md) — Day-by-day build plan with hourly tasks
-
----
 
 ## 📦 Dependencies
 
@@ -655,4 +633,4 @@ sonner                     # toast notifications
 
 ## 📄 License
 
-Built for internship evaluation purposes. Not affiliated with Splitwise, Inc.
+Built for evaluation purposes. Not affiliated with Splitwise, Inc.
